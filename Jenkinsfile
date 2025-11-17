@@ -3,31 +3,36 @@ flag = true
 pipeline {
     agent any
 
+    // Environment variables available to all stages
+    environment {
+        VERSION = "1.0.5"
+    }
+
     stages {
 
         stage('Build') {
             steps {
-                echo 'Building Project'
+                echo "Building Project with version: ${VERSION}"
             }
         }
 
         stage('Test') {
             when {
                 expression {
-                    flag == true       // Run Test stage only if condition is true
+                    flag == true      // Run test stage only if flag is true
                 }
             }
             steps {
-                echo 'Testing Project'
+                echo "Testing Project (Version: ${VERSION})"
                 script {
-                    flag = false      // Example: update flag inside script block
+                    flag = false     // Update the flag after running tests
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying Project'
+                echo "Deploying Project Version: ${VERSION}"
             }
         }
     }
