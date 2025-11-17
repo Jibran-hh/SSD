@@ -1,10 +1,10 @@
 pipeline {
+
 agent any
 stages {
 stage(&#39;Build&#39;) {
 steps {
 echo &#39;Building..&#39;
-
 // Here you can define commands for your build
 }
 }
