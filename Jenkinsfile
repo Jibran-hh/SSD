@@ -1,3 +1,5 @@
+flag = true
+
 pipeline {
     agent any
 
@@ -5,34 +7,36 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building..'
+                echo 'Building Project'
             }
         }
 
         stage('Test') {
+            when {
+                expression {
+                    flag == true       // Run Test stage only if condition is true
+                }
+            }
             steps {
-                echo 'Testing..'
+                echo 'Testing Project'
+                script {
+                    flag = false      // Example: update flag inside script block
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deploying Project'
             }
         }
-
     }
 
     post {
-        // The conditions here will execute after the build is done
-
         always {
-            // This action will run regardless of build result
             echo 'Post build condition running'
         }
-
         failure {
-            // This runs only if the build fails
             echo 'Post Action if Build Failed'
         }
     }
