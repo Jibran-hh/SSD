@@ -5,7 +5,7 @@ pipeline {
 
     // Tools available for all stages
     tools {
-        maven 'Maven-3.9'      // <-- This name must match the one in: Manage Jenkins → Tools
+        maven 'Maven'    // <-- This must match EXACTLY the name in Jenkins → Tools
     }
 
     // Environment variables
@@ -20,7 +20,7 @@ pipeline {
                 echo "Building Project with version: ${VERSION}"
 
                 // Verify maven installation
-                sh "mvn --version"     // Windows users: bat 'mvn --version'
+                sh "mvn --version"     // Windows: bat 'mvn --version'
             }
         }
 
