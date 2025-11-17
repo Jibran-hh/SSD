@@ -1,56 +1,43 @@
-flag = true
-
 pipeline {
     agent any
 
-    // Tools available for all stages
-    tools {
-        maven 'Maven'    // <-- This must match EXACTLY the name in Jenkins → Tools
-    }
-
-    // Environment variables
-    environment {
-        VERSION = "1.0.5"
+    // Build parameters
+    parameters {
+        string(name: 'VERSION', defaultValue: '1.0.0', description: 'Application Version')
+        booleanParam(name: 'EXECUTE_TESTS', defaultValue: true, description: 'Run Test Stage?')
+        string(name: 'ENVIRONMENT', defaultValue: 'dev', description: 'Target Environment')
     }
 
     stages {
 
         stage('Build') {
             steps {
-                echo "Building Project with version: ${VERSION}"
-
-                // Verify maven installation
-                sh "mvn --version"     // Windows: bat 'mvn --version'
+                echo "Building Version: ${params.VERSION}"
+                echo "Target Environment: ${params.ENVIRONMENT}"
+                echo "Build stage completed."
             }
         }
 
         stage('Test') {
             when {
-                expression {
-                    flag == true
-                }
+                expression { params.EXECUTE_TESTS == true }
             }
             steps {
-                echo "Testing Project (Version: ${VERSION})"
-                script {
-                    flag = false
-                }
+                echo "Tests Executing..."
+                echo "Test stage completed."
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying Project Version: ${VERSION}"
+                echo "Deploying Version: ${params.VERSION} to ${params.ENVIRONMENT}"
             }
         }
     }
 
     post {
         always {
-            echo 'Post build condition running'
-        }
-        failure {
-            echo 'Post Action if Build Failed'
+            echo "Pipeline finished."
         }
     }
 }
